@@ -2,20 +2,19 @@
 <html>
 <head>
     <title>Update Message</title>
-   <script src="https://www.gstatic.com/firebasejs/9.19.1/firebase-app-compat.js"></script>
-    <!-- Add Firebase products that you want to use -->
+    <script src="https://www.gstatic.com/firebasejs/9.19.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.19.1/firebase-database-compat.js"></script>
     <script>
-		const firebaseConfig = {
-		  apiKey: "AIzaSyA-0MzVsb6_G0nVwXsAQSESFJPJyLe-8zY",
-		  authDomain: "iot-gecpl.firebaseapp.com",
-		  databaseURL: "https://iot-gecpl-default-rtdb.firebaseio.com",
-		  projectId: "iot-gecpl",
-		  storageBucket: "iot-gecpl.appspot.com",
-		  messagingSenderId: "1007609286318",
-		  appId: "1:1007609286318:web:8c633ee888dbb16078e73f",
-		  measurementId: "G-0KG1JNBRD2"
-		};
+        const firebaseConfig = {
+          apiKey: "AIzaSyA-0MzVsb6_G0nVwXsAQSESFJPJyLe-8zY",
+          authDomain: "iot-gecpl.firebaseapp.com",
+          databaseURL: "https://iot-gecpl-default-rtdb.firebaseio.com",
+          projectId: "iot-gecpl",
+          storageBucket: "iot-gecpl.appspot.com",
+          messagingSenderId: "1007609286318",
+          appId: "1:1007609286318:web:8c633ee888dbb16078e73f",
+          measurementId: "G-0KG1JNBRD2"
+        };
 
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
@@ -23,14 +22,23 @@
         function updateMessage(event) {
             event.preventDefault();
             const message = document.getElementById('newMessage').value;
-            database.ref('LED_STATUS').set(message);
+            database.ref('LED_STATUS').set(message)
+                .then(() => {
+                    document.getElementById('status').textContent = "Message updated successfully!";
+                })
+                .catch((error) => {
+                    console.error(error);
+                    document.getElementById('status').textContent = "Error updating message.";
+                });
         }
     </script>
 </head>
 <body>
     <form onsubmit="updateMessage(event)">
-        <input type="text" id="newMessage" placeholder="Enter new message">
+        <input type="text" id="newMessage" placeholder="Enter new message" required>
         <button type="submit">Update Message</button>
     </form>
+    <div id="status"></div>
+    <a href="index.html">Back to Message Display</a>
 </body>
 </html>
