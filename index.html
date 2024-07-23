@@ -24,12 +24,12 @@
         function fetchMessage() {
             const messageRef = database.ref('LED_STATUS');
             messageRef.on('value', (snapshot) => {
-                document.getElementById('message').textContent = snapshot.val();
+                document.getElementById('LED_STATUS').textContent = snapshot.val();
             });
         }
     </script>
 </head>
 <body onload="fetchMessage()">
-    <div id="message">New Loading message...</div>
+    <div id="LED_STATUS">New Loading message...</div>
 </body>
 </html>
