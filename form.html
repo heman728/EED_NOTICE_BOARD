@@ -18,7 +18,7 @@
 		};
 
         firebase.initializeApp(firebaseConfig);
-        const database = firebase.database(app);
+        const database = firebase.database();
 
         function updateMessage(event) {
             event.preventDefault();
