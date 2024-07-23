@@ -78,6 +78,16 @@
         a:hover {
             text-decoration: underline;
         }
+        #currentMessage {
+            background-color: #e9ecef;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            color: #495057;
+            font-size: 16px;
+            font-weight: bold;
+            border: 1px solid #ced4da;
+        }
     </style>
     <script>
         const firebaseConfig = {
@@ -97,6 +107,7 @@
         function showUpdateForm() {
             document.getElementById('loginForm').classList.add('hidden');
             document.getElementById('updateForm').classList.remove('hidden');
+            fetchCurrentMessage(); // Fetch current message when showing the update form
         }
 
         function handleLogin(event) {
@@ -130,24 +141,39 @@
                 });
         }
 
+        function fetchCurrentMessage() {
+            const messageRef = database.ref('User_Message_EED_Notice');
+            messageRef.once('value')
+                .then((snapshot) => {
+                    const currentMessage = snapshot.val();
+                    document.getElementById('currentMessage').textContent = "Current Message: " + currentMessage;
+                })
+                .catch((error) => {
+                    console.error(error);
+                    document.getElementById('status1').textContent = "Error fetching current message.";
+                    document.getElementById('status1').className = "status error";
+                });
+        }
+
         function updateMessage(event) {
             event.preventDefault();
             const message = document.getElementById('newMessage').value;
             database.ref('User_Message_EED_Notice').set(message)
                 .then(() => {
-                    document.getElementById('status').textContent = "Message updated successfully!";
-                    document.getElementById('status').className = "status success";
+                    document.getElementById('status1').textContent = "Message updated successfully!";
+                    document.getElementById('status1').className = "status success";
+                    fetchCurrentMessage(); // Update the displayed current message
                 })
                 .catch((error) => {
                     console.error(error);
-                    document.getElementById('status').textContent = "Error updating message.";
-                    document.getElementById('status').className = "status error";
+                    document.getElementById('status1').textContent = "Error updating message.";
+                    document.getElementById('status1').className = "status error";
                 });
         }
 
         function clearStatus() {
-            document.getElementById('status').textContent = "";
-            document.getElementById('status').className = "status";
+            document.getElementById('status1').textContent = "";
+            document.getElementById('status1').className = "status";
         }
 
         function logout() {
@@ -155,6 +181,9 @@
             document.getElementById('updateForm').classList.add('hidden');
             document.getElementById('status').textContent = "";
             document.getElementById('status').className = "status";
+            document.getElementById('status1').textContent = "";
+            document.getElementById('status1').className = "status";
+            document.getElementById('currentMessage').textContent = "";
         }
     </script>
 </head>
@@ -171,12 +200,13 @@
         </div>
         <div id="updateForm" class="hidden">
             <h1>Update Message</h1>
+            <div id="currentMessage"></div>
             <form onsubmit="updateMessage(event)">
                 <input type="text" id="newMessage" placeholder="Enter new message" required onfocus="clearStatus()">
                 <button type="submit">Update Message</button>
             </form>
+            <div id="status1" class="status"></div>
             <button class="logout-button" onclick="logout()">Logout</button>
-            <div id="status" class="status"></div>
         </div>
     </div>
 </body>
