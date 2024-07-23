@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Update Message</title>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js"></script>
+    <script>
+		const firebaseConfig = {
+		  apiKey: "AIzaSyA-0MzVsb6_G0nVwXsAQSESFJPJyLe-8zY",
+		  authDomain: "iot-gecpl.firebaseapp.com",
+		  databaseURL: "https://iot-gecpl-default-rtdb.firebaseio.com",
+		  projectId: "iot-gecpl",
+		  storageBucket: "iot-gecpl.appspot.com",
+		  messagingSenderId: "1007609286318",
+		  appId: "1:1007609286318:web:8c633ee888dbb16078e73f",
+		  measurementId: "G-0KG1JNBRD2"
+		};
+
+        const app = firebase.initializeApp(firebaseConfig);
+        const database = firebase.database(app);
+
+        function updateMessage(event) {
+            event.preventDefault();
+            const message = document.getElementById('newMessage').value;
+            database.ref('message').set(message);
+        }
+    </script>
+</head>
+<body>
+    <form onsubmit="updateMessage(event)">
+        <input type="text" id="newMessage" placeholder="Enter new message">
+        <button type="submit">Update Message</button>
+    </form>
+</body>
+</html>
