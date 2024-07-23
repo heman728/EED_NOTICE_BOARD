@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Dynamic Message Page</title>
     <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
     <script src="https://www.gstatic.com/firebasejs/9.19.1/firebase-app-compat.js"></script>
     <!-- Add Firebase products that you want to use -->
@@ -26,20 +25,21 @@
         function fetchMessage() {
             const messageRef = database.ref('User_Message_EED_Notice');
             messageRef.on('value', (snapshot) => {
+                let message = "No message found.";
                 if (snapshot.exists()) {
-                    document.getElementById('User_Message_EED_Notice').textContent = snapshot.val();
-                } else {
-                    console.log("No data available");
-                    document.getElementById('User_Message_EED_Notice').textContent = "No message found.";
+                    message = snapshot.val();
                 }
+                document.open();
+                document.write('<body>' + message + '</body>');
+                document.close();
             }, (error) => {
-                console.error(error);
-                document.getElementById('User_Message_EED_Notice').textContent = "Error retrieving message.";
+                document.open();
+                document.write('<body>Error retrieving message.</body>');
+                document.close();
             });
         }
     </script>
 </head>
 <body onload="fetchMessage()">
-    <div id="User_Message_EED_Notice">Loading message...</div>
 </body>
 </html>
