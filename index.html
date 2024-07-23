@@ -22,7 +22,7 @@
         const database = firebase.database(app);
 
         function fetchMessage() {
-            const messageRef = database.ref('message');
+            const messageRef = database.ref('LED_STATUS');
             messageRef.on('value', (snapshot) => {
                 document.getElementById('message').textContent = snapshot.val();
             });
