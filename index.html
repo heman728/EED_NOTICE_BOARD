@@ -24,22 +24,22 @@
         const database = firebase.database();
 
         function fetchMessage() {
-            const messageRef = database.ref('LED_STATUS');
+            const messageRef = database.ref('User_Message_EED_Notice');
             messageRef.on('value', (snapshot) => {
                 if (snapshot.exists()) {
-                    document.getElementById('LED_STATUS').textContent = snapshot.val();
+                    document.getElementById('User_Message_EED_Notice').textContent = snapshot.val();
                 } else {
                     console.log("No data available");
-                    document.getElementById('LED_STATUS').textContent = "No message found.";
+                    document.getElementById('User_Message_EED_Notice').textContent = "No message found.";
                 }
             }, (error) => {
                 console.error(error);
-                document.getElementById('LED_STATUS').textContent = "Error retrieving message.";
+                document.getElementById('User_Message_EED_Notice').textContent = "Error retrieving message.";
             });
         }
     </script>
 </head>
 <body onload="fetchMessage()">
-    <div id="LED_STATUS">Loading message...</div>
+    <div id="User_Message_EED_Notice">Loading message...</div>
 </body>
 </html>
