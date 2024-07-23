@@ -31,11 +31,15 @@
                     document.getElementById('status').textContent = "Error updating message.";
                 });
         }
+
+        function clearStatus() {
+            document.getElementById('status').textContent = "";
+        }
     </script>
 </head>
 <body>
     <form onsubmit="updateMessage(event)">
-        <input type="text" id="newMessage" placeholder="Enter new message" required>
+        <input type="text" id="newMessage" placeholder="Enter new message" required onfocus="clearStatus()">
         <button type="submit">Update Message</button>
     </form>
     <div id="status"></div>
