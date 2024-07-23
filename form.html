@@ -4,6 +4,71 @@
     <title>Update Message</title>
     <script src="https://www.gstatic.com/firebasejs/9.19.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.19.1/firebase-database-compat.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        input[type="text"] {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+        button {
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .status {
+            margin: 10px 0;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .status.success {
+            color: #28a745;
+        }
+        .status.error {
+            color: #dc3545;
+        }
+        a {
+            color: #007bff;
+            text-decoration: none;
+            font-size: 16px;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
     <script>
         const firebaseConfig = {
           apiKey: "AIzaSyA-0MzVsb6_G0nVwXsAQSESFJPJyLe-8zY",
@@ -22,27 +87,33 @@
         function updateMessage(event) {
             event.preventDefault();
             const message = document.getElementById('newMessage').value;
-            database.ref('LED_STATUS').set(message)
+            database.ref('User_Message_EED_Notice').set(message)
                 .then(() => {
                     document.getElementById('status').textContent = "Message updated successfully!";
+                    document.getElementById('status').className = "status success";
                 })
                 .catch((error) => {
                     console.error(error);
                     document.getElementById('status').textContent = "Error updating message.";
+                    document.getElementById('status').className = "status error";
                 });
         }
 
         function clearStatus() {
             document.getElementById('status').textContent = "";
+            document.getElementById('status').className = "status";
         }
     </script>
 </head>
 <body>
-    <form onsubmit="updateMessage(event)">
-        <input type="text" id="newMessage" placeholder="Enter new message" required onfocus="clearStatus()">
-        <button type="submit">Update Message</button>
-    </form>
-    <div id="status"></div>
-    
+    <div class="container">
+        <h1>Update Message</h1>
+        <form onsubmit="updateMessage(event)">
+            <input type="text" id="newMessage" placeholder="Enter new message" required onfocus="clearStatus()">
+            <button type="submit">Update Message</button>
+        </form>
+        <div id="status" class="status"></div>
+        <a href="index.html">Back to Message Display</a>
+    </div>
 </body>
 </html>
