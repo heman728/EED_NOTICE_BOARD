@@ -27,7 +27,7 @@
             color: #333;
             margin-bottom: 20px;
         }
-        input[type="text"] {
+        input[type="text"], input[type="password"] {
             width: calc(100% - 22px);
             padding: 10px;
             margin: 10px 0;
@@ -49,6 +49,13 @@
         button:hover {
             background-color: #218838;
         }
+        .logout-button {
+            background-color: #dc3545;
+            margin-top: 10px;
+        }
+        .logout-button:hover {
+            background-color: #c82333;
+        }
         .status {
             margin: 10px 0;
             font-size: 16px;
@@ -59,6 +66,9 @@
         }
         .status.error {
             color: #dc3545;
+        }
+        .hidden {
+            display: none;
         }
         a {
             color: #007bff;
@@ -84,6 +94,42 @@
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
 
+        function showUpdateForm() {
+            document.getElementById('loginForm').classList.add('hidden');
+            document.getElementById('updateForm').classList.remove('hidden');
+        }
+
+        function handleLogin(event) {
+            event.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            if (username !== 'Admin') {
+                document.getElementById('status').textContent = "Invalid username.";
+                document.getElementById('status').className = "status error";
+                return;
+            }
+
+            const passwordRef = database.ref('User_Password');
+            passwordRef.once('value')
+                .then((snapshot) => {
+                    const storedPassword = snapshot.val();
+                    if (storedPassword === password) {
+                        document.getElementById('status').textContent = "Login successful!";
+                        document.getElementById('status').className = "status success";
+                        showUpdateForm();
+                    } else {
+                        document.getElementById('status').textContent = "Incorrect password. Please try again.";
+                        document.getElementById('status').className = "status error";
+                    }
+                })
+                .catch((error) => {
+                    console.error(error);
+                    document.getElementById('status').textContent = "Error verifying credentials.";
+                    document.getElementById('status').className = "status error";
+                });
+        }
+
         function updateMessage(event) {
             event.preventDefault();
             const message = document.getElementById('newMessage').value;
@@ -103,17 +149,35 @@
             document.getElementById('status').textContent = "";
             document.getElementById('status').className = "status";
         }
+
+        function logout() {
+            document.getElementById('loginForm').classList.remove('hidden');
+            document.getElementById('updateForm').classList.add('hidden');
+            document.getElementById('status').textContent = "";
+            document.getElementById('status').className = "status";
+        }
     </script>
 </head>
 <body>
     <div class="container">
-        <h1>Update Message</h1>
-        <form onsubmit="updateMessage(event)">
-            <input type="text" id="newMessage" placeholder="Enter new message" required onfocus="clearStatus()">
-            <button type="submit">Update Message</button>
-        </form>
-        <div id="status" class="status"></div>
-        <a href="index.html">Back to Message Display</a>
+        <div id="loginForm">
+            <h1>Login</h1>
+            <form onsubmit="handleLogin(event)">
+                <input type="text" id="username" placeholder="Username" required>
+                <input type="password" id="password" placeholder="Password" required>
+                <button type="submit">Login</button>
+            </form>
+            <div id="status" class="status"></div>
+        </div>
+        <div id="updateForm" class="hidden">
+            <h1>Update Message</h1>
+            <form onsubmit="updateMessage(event)">
+                <input type="text" id="newMessage" placeholder="Enter new message" required onfocus="clearStatus()">
+                <button type="submit">Update Message</button>
+            </form>
+            <button class="logout-button" onclick="logout()">Logout</button>
+            <div id="status" class="status"></div>
+        </div>
     </div>
 </body>
 </html>
